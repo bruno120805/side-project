@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -27,9 +28,9 @@ export class SchoolController {
     return this.schoolService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.schoolService.findOne(+id);
+  @Get(':schoolId')
+  findOne(@Param('schoolId', ParseUUIDPipe) id: string) {
+    return this.schoolService.findOne(id);
   }
 
   @Patch(':id')

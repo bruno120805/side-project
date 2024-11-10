@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -13,11 +13,25 @@ export class SchoolService {
   }
 
   findAll() {
-    return `This action returns all school`;
+    return this.prisma.school.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} school`;
+  async findOne(id: string) {
+    try {
+      const school = await this.prisma.school.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!school) {
+        throw new NotFoundException('School not found');
+      }
+
+      return school;
+    } catch (error) {
+      throw new Error('School not found');
+    }
   }
 
   update(id: number, updateSchoolDto: UpdateSchoolDto) {
