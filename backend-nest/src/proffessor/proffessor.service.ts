@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProffessorDto } from './dto/create-proffessor.dto';
 import { UpdateProffessorDto } from './dto/update-proffessor.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ProffessorService {
-  create(createProffessorDto: CreateProffessorDto) {
-    return 'This action adds a new proffessor';
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   findAll() {
-    return `This action returns all proffessor`;
+    return this.prisma.proffessor.findMany({});
   }
 
   findOne(id: number) {

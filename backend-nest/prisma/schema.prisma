@@ -52,6 +52,7 @@ model Proffessor {
   id        String   @id @default(uuid())
   name      String
   schoolId  String
+  subject   String
   school    School   @relation(fields: [schoolId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
