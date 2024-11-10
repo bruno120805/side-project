@@ -33,13 +33,16 @@ export class SchoolController {
     return this.schoolService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSchoolDto: UpdateSchoolDto) {
-    return this.schoolService.update(+id, updateSchoolDto);
+  @Patch(':schoolId')
+  update(
+    @Param('schoolId') id: string,
+    @Body() updateSchoolDto: UpdateSchoolDto,
+  ) {
+    return this.schoolService.update(id, updateSchoolDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.schoolService.remove(+id);
+  @Delete(':schoolId')
+  remove(@Param('schoolId') id: string) {
+    return this.schoolService.remove(id);
   }
 }

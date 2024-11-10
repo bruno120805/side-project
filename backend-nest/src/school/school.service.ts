@@ -7,9 +7,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SchoolService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createSchoolDto: CreateSchoolDto) {
-    await this.prisma.school.create({
+    const school = await this.prisma.school.create({
       data: createSchoolDto,
     });
+
+    return school;
   }
 
   findAll() {
@@ -34,11 +36,28 @@ export class SchoolService {
     }
   }
 
-  update(id: number, updateSchoolDto: UpdateSchoolDto) {
-    return `This action updates a #${id} school`;
+  async update(id: string, updateSchoolDto: UpdateSchoolDto) {
+    await this.findOne(id);
+
+    const updatedSchool = await this.prisma.school.update({
+      where: {
+        id,
+      },
+      data: updateSchoolDto,
+    });
+
+    return updatedSchool;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} school`;
+  async remove(id: string) {
+    await this.findOne(id);
+
+    await this.prisma.school.delete({
+      where: {
+        id,
+      },
+    });
+
+    return 'School deleted successfully';
   }
 }
