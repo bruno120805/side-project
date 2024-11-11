@@ -1,15 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProffessorDto } from './dto/create-proffessor.dto';
 import { UpdateProffessorDto } from './dto/update-proffessor.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateProffessorDto } from './dto/create-proffessor.dto';
 
 @Injectable()
 export class ProffessorService {
-  create(createProffessorDto: CreateProffessorDto) {
-    return 'This action adds a new proffessor';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createProffessorDto: CreateProffessorDto, schoolId: string) {
+    const proffessorData = await this.prisma.proffessor.create({
+      data: {
+        ...createProffessorDto,
+        school: {
+          connect: {
+            id: schoolId,
+          },
+        },
+      },
+    });
+
+    return proffessorData;
   }
 
   findAll() {
-    return `This action returns all proffessor`;
+    return this.prisma.proffessor.findMany({});
   }
 
   findOne(id: number) {

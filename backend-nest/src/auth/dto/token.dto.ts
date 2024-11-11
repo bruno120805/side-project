@@ -1,7 +1,7 @@
-import { IsString, IsUUID } from 'class-validator';
+import { IsEmail, IsUUID } from 'class-validator';
 
 export class TokenDto {
-  @IsString()
+  @IsEmail()
   email: string;
   @IsUUID()
   userId: string;
