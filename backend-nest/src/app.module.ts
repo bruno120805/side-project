@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PassportModule } from '@nestjs/passport';
 import { ProffessorModule } from './proffessor/proffessor.module';
 import { SchoolModule } from './school/school.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SchoolModule } from './school/school.module';
     }),
     ProffessorModule,
     SchoolModule,
+    PostModule,
   ],
   controllers: [],
   providers: [],

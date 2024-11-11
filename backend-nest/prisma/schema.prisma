@@ -33,19 +33,28 @@ model RefreshToken {
 }
 
 model Post {
-  id        String   @id @default(uuid())
-  title     String
-  content   String
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
+  id      String @id @default(uuid())
+  title   String
+  content String
+
+  school   School @relation(fields: [schoolId], references: [id])
+  schoolId String
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  proffessor   Proffessor? @relation(fields: [proffessorId], references: [id])
+  proffessorId String?
 }
 
 model School {
   id         String       @id @default(uuid())
   name       String
   Proffessor Proffessor[]
+  Post       Post[]
 }
 
 model Proffessor {
@@ -55,4 +64,6 @@ model Proffessor {
   school    School   @relation(fields: [schoolId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  posts Post[] // Relación uno a muchos con Post
 }
