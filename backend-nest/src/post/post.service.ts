@@ -32,6 +32,7 @@ export class PostService {
         professor = await prisma.proffessor.create({
           data: {
             name: proffessorName,
+            subject: createPostDto.subject,
             school: {
               connect: { id: school.id },
             },
@@ -47,11 +48,12 @@ export class PostService {
           author: {
             connect: { id: userId },
           },
-          proffessor: {
-            connect: { id: professor.id },
-          },
-          school: {
-            connect: { id: school.id },
+        },
+        include: {
+          author: {
+            select: {
+              displayName: true,
+            },
           },
         },
       });

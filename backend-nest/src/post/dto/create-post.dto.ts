@@ -11,5 +11,8 @@ export class CreatePostDto {
   proffessorName: string;
 
   @IsString()
+  subject: string;
+
+  @IsString()
   schoolName: string;
 }
