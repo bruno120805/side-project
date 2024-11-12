@@ -8,7 +8,9 @@ export class SchoolService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createSchoolDto: CreateSchoolDto) {
     const school = await this.prisma.school.create({
-      data: createSchoolDto,
+      data: {
+        name: createSchoolDto.name.replaceAll(' ', '+'),
+      },
     });
 
     return school;
