@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProffessorService } from './proffessor.service';
 import { UpdateProffessorDto } from './dto/update-proffessor.dto';
@@ -28,9 +29,9 @@ export class ProffessorController {
     return this.proffessorService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.proffessorService.findOne(+id);
+  @Get('buscar')
+  findByQuery(@Query('buscar') buscar: string, @Query('q') query: string) {
+    return this.proffessorService.findManyProfessors(buscar, query);
   }
 
   @Patch(':id')
