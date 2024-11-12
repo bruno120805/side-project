@@ -45,6 +45,12 @@ export class ProffessorService {
                 name: true,
               },
             },
+            posts: {
+              select: {
+                title: true,
+                content: true,
+              },
+            },
           },
         });
 
