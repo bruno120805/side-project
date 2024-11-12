@@ -17,7 +17,7 @@ export class PostService {
       if (!school) {
         school = await prisma.school.create({
           data: {
-            name: schoolName,
+            name: schoolName.replaceAll(' ', '+').toLowerCase(),
           },
         });
       }
@@ -31,7 +31,7 @@ export class PostService {
       if (!professor) {
         professor = await prisma.proffessor.create({
           data: {
-            name: proffessorName,
+            name: proffessorName.replaceAll(' ', '+').toLowerCase(),
             subject: createPostDto.subject,
             school: {
               connect: { id: school.id },
@@ -47,6 +47,12 @@ export class PostService {
           content: createPostDto.content,
           author: {
             connect: { id: userId },
+          },
+          school: {
+            connect: { id: school.id },
+          },
+          proffessor: {
+            connect: { id: professor.id },
           },
         },
         include: {
