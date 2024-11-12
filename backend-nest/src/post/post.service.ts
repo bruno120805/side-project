@@ -11,7 +11,7 @@ export class PostService {
 
     const post = await this.prisma.$transaction(async (prisma) => {
       let school = await prisma.school.findFirst({
-        where: { name: schoolName.toLowerCase() },
+        where: { name: schoolName.replaceAll(' ', '+').toLowerCase() },
       });
 
       if (!school) {
@@ -24,7 +24,7 @@ export class PostService {
 
       // Verificamos si el profesor ya existe
       let professor = await prisma.proffessor.findFirst({
-        where: { name: proffessorName.toLowerCase() },
+        where: { name: proffessorName.replaceAll(' ', '+').toLowerCase() },
       });
 
       // Si el profesor no existe, lo creamos
