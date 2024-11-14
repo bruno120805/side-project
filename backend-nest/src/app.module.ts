@@ -6,6 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { ProffessorModule } from './proffessor/proffessor.module';
 import { SchoolModule } from './school/school.module';
 import { PostModule } from './post/post.module';
+import { NotesModule } from './notes/notes.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PostModule } from './post/post.module';
     ProffessorModule,
     SchoolModule,
     PostModule,
+    NotesModule,
   ],
   controllers: [],
   providers: [],

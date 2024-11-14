@@ -21,6 +21,7 @@ model User {
   refreshTokens RefreshToken[]
   post          Post[]
   roles         String[]       @default(["user"])
+  notes         Notes[]
 }
 
 model RefreshToken {
@@ -30,6 +31,16 @@ model RefreshToken {
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   expiresAt DateTime
+}
+
+model Notes {
+  id        String   @id @default(uuid())
+  subject   String
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Post {
