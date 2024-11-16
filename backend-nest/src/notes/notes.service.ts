@@ -1,15 +1,90 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNoteDto } from './dto/create-note.dto';
+import { S3Service } from 'src/services/s3.service';
 import { UpdateNoteDto } from './dto/update-note.dto';
+import { v4 } from 'uuid';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateNoteDto } from './dto/create-note.dto';
 
 @Injectable()
 export class NotesService {
-  create(createNoteDto: CreateNoteDto) {
-    return 'This action adds a new note';
-  }
+  constructor(
+    private readonly s3: S3Service,
+    private readonly prisma: PrismaService,
+  ) {}
 
-  findAll() {
-    return `This action returns all notes`;
+  // async uploadFilesNote(
+  //   file: Express.Multer.File,
+  //   createNoteDto: CreateNoteDto,
+  //   professorId: string,
+  //   userId: string,
+  // ) {
+  //   const key: string = v4();
+  //   const uploadedFile = await this.s3.upload(file, key);
+
+  //   try {
+  //     const notes = await this.prisma.$transaction(async (prisma) => {
+  //       return prisma.notes.create({
+  //         data: {
+  //           ...createNoteDto,
+  //           fileUrl: [uploadedFile],
+  //           user: {
+  //             connect: { id: userId },
+  //           },
+  //           Proffessor: {
+  //             connect: { id: professorId },
+  //           },
+  //         },
+  //         include: {
+  //           Proffessor: {
+  //             select: {
+  //               name: true,
+  //             },
+  //           },
+  //         },
+  //       });
+  //     });
+  //     return notes;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  async uploadFilesNotes(
+    files: Array<Express.Multer.File>,
+    createNoteDto: CreateNoteDto,
+    userId: string,
+    professorId: string,
+  ) {
+    const uploadedFiles = await Promise.all(
+      files.map((file) => this.s3.upload(file, v4())),
+    );
+
+    try {
+      const notes = await this.prisma.$transaction(async (prisma) => {
+        return prisma.notes.create({
+          data: {
+            ...createNoteDto,
+            filesUrls: uploadedFiles,
+            user: {
+              connect: { id: userId },
+            },
+            Proffessor: {
+              connect: { id: professorId },
+            },
+          },
+          include: {
+            Proffessor: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        });
+      });
+      return notes;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findOne(id: number) {
