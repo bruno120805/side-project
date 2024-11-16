@@ -25,36 +25,6 @@ import { Request } from 'express';
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
-  //TODO: ELEGIR CUAL DE LOS 2 METODOS USAMOS
-
-  //SUBE SOLO UN ARCHIVO
-  // @UseGuards(JwtAuthGuard)
-  // @Post(':professorId/create-note')
-  // @UseInterceptors(
-  //   FileInterceptor('files', {
-  //     limits: {
-  //       fileSize: 1024 * 1024 * 2, // 2MB
-  //       files: 2,
-  //     },
-  //   }),
-  // )
-  // uploadFilesNotes(
-  //   @UploadedFile() files: Express.Multer.File,
-  //   @Body() createNoteDto: CreateNoteDto,
-  //   @Param('professorId', ParseUUIDPipe) professorId: string,
-  //   @Req() req: Request,
-  // ) {
-  //   const userId = req.user['userId'];
-  //   if (!files) throw new BadRequestException('No files uploaded');
-
-  //   return this.notesService.uploadFilesNote(
-  //     files,
-  //     createNoteDto,
-  //     professorId,
-  //     userId,
-  //   );
-  // }
-
   //SUBE VARIOS ARCHIVOS
   @UseGuards(JwtAuthGuard)
   @Post(':professorId/creates-note')

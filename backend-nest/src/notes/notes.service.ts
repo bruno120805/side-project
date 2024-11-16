@@ -12,43 +12,6 @@ export class NotesService {
     private readonly prisma: PrismaService,
   ) {}
 
-  // async uploadFilesNote(
-  //   file: Express.Multer.File,
-  //   createNoteDto: CreateNoteDto,
-  //   professorId: string,
-  //   userId: string,
-  // ) {
-  //   const key: string = v4();
-  //   const uploadedFile = await this.s3.upload(file, key);
-
-  //   try {
-  //     const notes = await this.prisma.$transaction(async (prisma) => {
-  //       return prisma.notes.create({
-  //         data: {
-  //           ...createNoteDto,
-  //           fileUrl: [uploadedFile],
-  //           user: {
-  //             connect: { id: userId },
-  //           },
-  //           Proffessor: {
-  //             connect: { id: professorId },
-  //           },
-  //         },
-  //         include: {
-  //           Proffessor: {
-  //             select: {
-  //               name: true,
-  //             },
-  //           },
-  //         },
-  //       });
-  //     });
-  //     return notes;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
   async uploadFilesNotes(
     files: Array<Express.Multer.File>,
     createNoteDto: CreateNoteDto,
