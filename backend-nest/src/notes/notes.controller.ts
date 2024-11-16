@@ -57,6 +57,7 @@ export class NotesController {
       professorId,
     );
   }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.notesService.findOne(+id);
@@ -67,8 +68,8 @@ export class NotesController {
     return this.notesService.update(+id, updateNoteDto);
   }
 
-  @Delete(':id')
+  @Delete(':noteId')
   remove(@Param('id') id: string) {
-    return this.notesService.remove(+id);
+    return this.notesService.remove(id);
   }
 }
