@@ -38,6 +38,7 @@ model Notes {
   subject      String
   title        String
   content      String
+  filesUrls      String[] 
   createdAt    DateTime    @default(now())
   userId       String
   user         User        @relation(fields: [userId], references: [id])

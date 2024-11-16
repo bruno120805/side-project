@@ -5,44 +5,83 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
+  Req,
   UploadedFile,
+  UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { NotesService } from './notes.service';
+import { CreateNoteDto } from './dto/create-note.dto';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { Request } from 'express';
 
 @Controller('notes')
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
-  //TODO: terminar este metodo
-  @Post('create-note')
+  //TODO: ELEGIR CUAL DE LOS 2 METODOS USAMOS
+
+  //SUBE SOLO UN ARCHIVO
+  // @UseGuards(JwtAuthGuard)
+  // @Post(':professorId/create-note')
+  // @UseInterceptors(
+  //   FileInterceptor('files', {
+  //     limits: {
+  //       fileSize: 1024 * 1024 * 2, // 2MB
+  //       files: 2,
+  //     },
+  //   }),
+  // )
+  // uploadFilesNotes(
+  //   @UploadedFile() files: Express.Multer.File,
+  //   @Body() createNoteDto: CreateNoteDto,
+  //   @Param('professorId', ParseUUIDPipe) professorId: string,
+  //   @Req() req: Request,
+  // ) {
+  //   const userId = req.user['userId'];
+  //   if (!files) throw new BadRequestException('No files uploaded');
+
+  //   return this.notesService.uploadFilesNote(
+  //     files,
+  //     createNoteDto,
+  //     professorId,
+  //     userId,
+  //   );
+  // }
+
+  //SUBE VARIOS ARCHIVOS
+  @UseGuards(JwtAuthGuard)
+  @Post(':professorId/creates-note')
   @UseInterceptors(
-    FileInterceptor('files', {
+    FilesInterceptor('files', 5, {
       limits: {
         fileSize: 1024 * 1024 * 2, // 2MB
-        files: 2,
+        files: 5,
       },
     }),
   )
-  createNote(
-    @UploadedFile() files: Express.Multer.File,
-    // @Body() createNoteDto: CreateNoteDto,
+  uploadFilesNotes(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() createNoteDto: CreateNoteDto,
+    @Param('professorId', ParseUUIDPipe) professorId: string,
+    @Req() req: Request,
   ) {
+    const userId = req.user['userId'];
+
     if (!files) throw new BadRequestException('No files uploaded');
-
-    return this.notesService.uploadFileNote(files);
-    // return this.notesService.create(createNoteDto);
+    return this.notesService.uploadFilesNotes(
+      files,
+      createNoteDto,
+      userId,
+      professorId,
+    );
   }
-
-  @Get()
-  findAll() {
-    return this.notesService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.notesService.findOne(+id);
