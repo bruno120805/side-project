@@ -34,13 +34,16 @@ model RefreshToken {
 }
 
 model Notes {
-  id        String   @id @default(uuid())
-  subject   String
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  id           String      @id @default(uuid())
+  subject      String
+  title        String
+  content      String
+  filesUrls      String[] 
+  createdAt    DateTime    @default(now())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  Proffessor   Proffessor? @relation(fields: [proffessorId], references: [id])
+  proffessorId String?
 }
 
 model Post {
@@ -80,4 +83,5 @@ model Proffessor {
   updatedAt DateTime @updatedAt
 
   posts Post[] // Relación uno a muchos con Post
+  notes Notes[] // Relación uno a muchos con Notes
 }
